@@ -1,0 +1,21 @@
+{
+  "name": "POPMART 靈魂的容器",
+  "short_name": "POPMART 展",
+  "description": "沉浸式敘事展 - 靈魂的偶然相遇",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#c5a059",
+  "icons": [
+    {
+      "src": "https://via.placeholder.com/192x192/c5a059/ffffff?text=POP",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://via.placeholder.com/512x512/c5a059/ffffff?text=POPMART",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
