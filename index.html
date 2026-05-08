@@ -1,133 +1,21 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>星流 - p5.js 互動藝術</title>
-  
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
-  
-  <style>
-    /* 2. 基本 CSS 設定：移除邊距，確保畫布全螢幕且無捲軸 */
-    body, html {
-      margin: 0;
-      padding: 0;
-      overflow: hidden; /* 防止出現捲軸 */
-      background-color: #000; /* 預設背景黑 */
+{
+  "name": "星流互動藝術",
+  "short_name": "星流",
+  "description": "基於 p5.js 的流體粒子互動藝術",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "https://via.placeholder.com/192x192/000000/FFFFFF?text=Star",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://via.placeholder.com/512x512/000000/FFFFFF?text=StarArt",
+      "sizes": "512x512",
+      "type": "image/png"
     }
-    canvas {
-      display: block; /* 移除畫布下方的微小白邊 */
-    }
-  </style>
-</head>
-<body>
-
-  <script>
-    let particles = [];
-    const numParticles = 200; // 粒子數量
-
-    function setup() {
-      createCanvas(windowWidth, windowHeight);
-      colorMode(HSB, 360, 100, 100, 100); // 使用 HSB 色彩模式
-      noStroke();
-      
-      // 初始化粒子
-      for (let i = 0; i < numParticles; i++) {
-        particles.push(new Particle());
-      }
-    }
-
-    function draw() {
-      // 使用帶有透明度的背景，創造「拖尾」效果
-      background(0, 0, 0, 10); 
-
-      for (let p of particles) {
-        p.update();
-        p.show();
-        p.edges();
-      }
-    }
-
-    // 視窗大小改變時自動調整
-    function windowResized() {
-      resizeCanvas(windowWidth, windowHeight);
-    }
-
-    // 滑鼠點擊時產生排斥力（爆炸效果）
-    function mousePressed() {
-      for (let p of particles) {
-        p.explode();
-      }
-    }
-
-    // --- 粒子類別定義 ---
-    class Particle {
-      constructor() {
-        this.pos = createVector(random(width), random(height));
-        this.vel = p5.Vector.random2D();
-        this.acc = createVector(0, 0);
-        this.maxSpeed = 5;
-        this.hue = random(360); // 每個粒子有自己的基礎色相
-      }
-
-      update() {
-        let mouse = createVector(mouseX, mouseY);
-        
-        // 1. 計算滑鼠吸引力
-        let dir = p5.Vector.sub(mouse, this.pos);
-        let dist = dir.mag();
-        
-        // 只有當滑鼠在畫布內時才產生強吸引力
-        if (mouseX > 0 && mouseX < width && mouseY > 0 && mouseY < height) {
-          dir.normalize();
-          dir.mult(0.5); // 吸引力強度
-          this.acc.add(dir);
-        } else {
-          // 如果滑鼠離開，粒子隨機遊走
-          this.acc.add(p5.Vector.random2D().mult(0.1));
-        }
-
-        // 2. 物理運動更新
-        this.vel.add(this.acc);
-        this.vel.limit(this.maxSpeed);
-        this.pos.add(this.vel);
-        this.acc.mult(0); // 重置加速度
-
-        // 3. 顏色隨速度變化
-        this.hue = (this.hue + 1) % 360; 
-      }
-
-      // 爆炸效果：給予反向的巨大推力
-      explode() {
-        let mouse = createVector(mouseX, mouseY);
-        let force = p5.Vector.sub(this.pos, mouse);
-        let dist = force.mag();
-        
-        if (dist < 200) { // 只影響附近的粒子
-          force.normalize();
-          force.mult(20); // 爆炸力度
-          this.vel.add(force);
-        }
-      }
-
-      show() {
-        // 根據速度改變亮度，速度越快越亮
-        let brightness = map(this.vel.mag(), 0, this.maxSpeed, 50, 100);
-        // 根據速度改變大小
-        let size = map(this.vel.mag(), 0, this.maxSpeed, 2, 8);
-        
-        fill(this.hue, 80, brightness);
-        ellipse(this.pos.x, this.pos.y, size);
-      }
-
-      // 邊界檢查：超出螢幕則從另一邊出現
-      edges() {
-        if (this.pos.x > width) this.pos.x = 0;
-        if (this.pos.x < 0) this.pos.x = width;
-        if (this.pos.y > height) this.pos.y = 0;
-        if (this.pos.y < 0) this.pos.y = height;
-      }
-    }
-  </script>
-</body>
-</html>
+  ]
+}
